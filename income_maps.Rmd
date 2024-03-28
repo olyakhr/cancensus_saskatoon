@@ -1,6 +1,8 @@
 ---
 title: "income maps"
-output: html_document
+output: 
+  html_document:
+    keep_md: true
 date: "2024-03-28"
 ---
 
@@ -12,7 +14,7 @@ library(readr)
 set_cancensus_api_key("CensusMapper_8dc534856d0f0d995be506b231170919", overwrite = FALSE, install = FALSE)
 ```
 
-```{r}
+```{r, warnings = FALSE, message = FALSE,  echo = FALSE,  results = FALSE}
 census_data <- get_census(dataset='CA21', regions=list(CSD="4711066"), 
                           vectors=c("median_total_income"="v_CA21_560","median_female_income"="v_CA21_562", "median_male_income"="v_CA21_561"),
                           labels="detailed", geo_format="sf", level='DA')
@@ -28,6 +30,8 @@ ggplot(census_data) + geom_sf(aes(fill = median_total_income), colour = "grey") 
   coord_sf(datum=NA) +
   labs(title = "Median Total Income in 2020", subtitle = "Saskatoon, 2021 Census")
 ```
+
+Write some interpreation here.... 
 
 ```{r}
 ggplot(census_data) + geom_sf(aes(fill = median_female_income), colour = "grey") +
