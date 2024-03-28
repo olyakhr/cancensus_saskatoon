@@ -1,0 +1,51 @@
+---
+title: "income maps"
+output: html_document
+date: "2024-03-28"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(cancensus)
+library(ggplot2)
+library(readr)
+set_cancensus_api_key("CensusMapper_8dc534856d0f0d995be506b231170919", overwrite = FALSE, install = FALSE)
+```
+
+```{r}
+census_data <- get_census(dataset='CA21', regions=list(CSD="4711066"), 
+                          vectors=c("median_total_income"="v_CA21_560","median_female_income"="v_CA21_562", "median_male_income"="v_CA21_561"),
+                          labels="detailed", geo_format="sf", level='DA')
+str(census_data)
+```
+
+```{r}
+ggplot(census_data) + geom_sf(aes(fill = median_total_income), colour = "grey") +
+  scale_colour_brewer("Median Total Income", labels = scales::dollar) + theme_void() +
+  theme(panel.grid = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank()) + 
+  coord_sf(datum=NA) +
+  labs(title = "Median Total Income in 2020", subtitle = "Saskatoon, 2021 Census")
+```
+
+```{r}
+ggplot(census_data) + geom_sf(aes(fill = median_female_income), colour = "grey") +
+  scale_fill_viridis_c("Median Female Income", labels = scales::dollar, option = "cividis") + theme_void() +
+  theme(panel.grid = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank()) + 
+  coord_sf(datum=NA) +
+  labs(title = "Median Female Income in 2020", subtitle = "Saskatoon, 2021 Census")
+```
+
+```{r}
+ggplot(census_data) + geom_sf(aes(fill = median_male_income), colour = "grey") +
+  scale_fill_viridis_c("Median Male Income", labels = scales::dollar, option = "cividis") + theme_void() +
+  theme(panel.grid = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank()) + 
+  coord_sf(datum=NA) +
+  labs(title = "Median Male Income in 2020", subtitle = "Saskatoon, 2021 Census")
+```
+
