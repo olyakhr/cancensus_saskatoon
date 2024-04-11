@@ -1,10 +1,12 @@
 ---
-title: "income maps"
+title: "Income maps"
 output: 
   html_document:
     keep_md: true
 date: "2024-03-28"
 ---
+### We will create income maps using the "cancensus" package and CensusMapper data
+###### In this code I am using the latest 2021 census data.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -14,7 +16,7 @@ library(readr)
 set_cancensus_api_key("CensusMapper_8dc534856d0f0d995be506b231170919", overwrite = FALSE, install = FALSE)
 ```
 
-```{r, warnings = FALSE, message = FALSE,  echo = FALSE,  results = FALSE}
+```{r, warnings = FALSE, message = FALSE,  echo = FALSE}
 census_data <- get_census(dataset='CA21', regions=list(CSD="4711066"), 
                           vectors=c("median_total_income"="v_CA21_560","median_female_income"="v_CA21_562", "median_male_income"="v_CA21_561"),
                           labels="detailed", geo_format="sf", level='DA')
@@ -31,7 +33,7 @@ ggplot(census_data) + geom_sf(aes(fill = median_total_income), colour = "grey") 
   labs(title = "Median Total Income in 2020", subtitle = "Saskatoon, 2021 Census")
 ```
 
-Write some interpreation here.... 
+This map shows that the highest median total income is on the outskirts of Saskatoon, while the lowest income values are represented by University Heights Suburban Center and U of S campus, *apparently because of the predominant student population*.
 
 ```{r}
 ggplot(census_data) + geom_sf(aes(fill = median_female_income), colour = "grey") +
@@ -43,6 +45,8 @@ ggplot(census_data) + geom_sf(aes(fill = median_female_income), colour = "grey")
   labs(title = "Median Female Income in 2020", subtitle = "Saskatoon, 2021 Census")
 ```
 
+Unfortunately, median female income in Saskatoon shows the lowest max values. The only neighborhood which represents a median income among women higher than 60000CAD is **Nutana**. Most of Saskatoon's female population gets *between 40000CAD and 50000CAD* annually.
+
 ```{r}
 ggplot(census_data) + geom_sf(aes(fill = median_male_income), colour = "grey") +
   scale_fill_viridis_c("Median Male Income", labels = scales::dollar, option = "cividis") + theme_void() +
@@ -53,3 +57,5 @@ ggplot(census_data) + geom_sf(aes(fill = median_male_income), colour = "grey") +
   labs(title = "Median Male Income in 2020", subtitle = "Saskatoon, 2021 Census")
 ```
 
+Comparing with median total and female income, male population shows the highest median income values across the neighborhoods. 
+There's a significant difference between the west bank of the city with the predominant median income of **60000CAD+** and east bank with **up to 60000CAD** of annual income. 
